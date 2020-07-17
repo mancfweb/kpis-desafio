@@ -1,32 +1,76 @@
 import produce from 'immer';
 
 const INITIAL_STATE = {
-  token: null,
   signed: false,
-  loading: false,
-  place_user: {},
+  signin: {
+    data: {},
+    loading: false,
+    success: false,
+    error: false,
+  },
+  signup: {
+    loading: false,
+    success: false,
+    error: false,
+  },
 };
 
 export default function auth(state = INITIAL_STATE, action) {
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     switch (action.type) {
       case '@auth/SIGN_IN_REQUEST': {
-        draft.loading = true;
+        draft.signin = {
+          ...draft.signin,
+          loading: true,
+          success: false,
+          error: false,
+        };
         break;
       }
       case '@auth/SIGN_IN_SUCCESS': {
-        draft.token = action.payload.token;
-        draft.place_user = action.payload.place_user;
         draft.signed = true;
-        draft.loading = false;
+        draft.signin = {
+          data: draft.payload.data,
+          loading: false,
+          success: true,
+          error: false,
+        };
         break;
       }
-      case '@auth/SIGN_FAILURE': {
-        draft.loading = false;
+      case '@auth/SIGN_IN_FAILURE': {
+        draft.signin = {
+          ...draft.signin,
+          loading: false,
+          success: false,
+          error: true,
+        };
+        break;
+      }
+      case '@auth/SIGN_UP_REQUEST': {
+        draft.signup = {
+          loading: true,
+          success: false,
+          error: false,
+        };
+        break;
+      }
+      case '@auth/SIGN_UP_SUCCESS': {
+        draft.signup = {
+          loading: false,
+          success: true,
+          error: false,
+        };
+        break;
+      }
+      case '@auth/SIGN_UP_FAILURE': {
+        draft.signup = {
+          loading: false,
+          success: false,
+          error: true,
+        };
         break;
       }
       case '@auth/SIGN_OUT': {
-        draft.token = null;
         draft.signed = false;
         break;
       }

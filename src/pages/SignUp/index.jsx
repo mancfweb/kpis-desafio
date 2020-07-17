@@ -12,14 +12,28 @@ import {
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
+import {signUpRequest} from '../../store/modules/user/actions';
+
 import Button from '../../components/Button';
 
 import {useStyles} from './styles';
 
-export default function SignIn() {
+export default function SignUp() {
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(
+      signUpRequest({
+        name: 'marcus cavalcanti',
+        email: 'marcus.cavalcanti20@gmail.com',
+        password: 'nautico20',
+      }),
+    );
+    console.log(event);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -27,17 +41,16 @@ export default function SignIn() {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <h1>Login</h1>
-        <form className={classes.form} noValidate>
+        <h1>Crie sua conta</h1>
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="name"
+            label="Nome"
+            name="name"
             autoFocus
           />
           <TextField
@@ -45,8 +58,18 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
+            id="email"
+            label="E-mail"
+            name="email"
+            autoComplete="email"
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
             name="password"
-            label="Password"
+            label="Senha"
             type="password"
             id="password"
             autoComplete="current-password"
@@ -56,12 +79,9 @@ export default function SignIn() {
             label="Remember me"
           />
           <Button type="submit" fullWidth>
-            Acessar
+            Cadastrar
           </Button>
           <Grid container>
-            <Grid item xs>
-              Esqueceu a senha?
-            </Grid>
             <Grid item>Ainda não tem conta? Crie a sua agora</Grid>
           </Grid>
         </form>

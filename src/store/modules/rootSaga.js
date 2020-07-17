@@ -1,8 +1,8 @@
 import {all} from 'redux-saga/effects';
 
-import contracts from './contracts/sagas';
-import parties from './parties/sagas';
+import auth from './auth/sagas';
+import user from './user/sagas';
 
 export default function* rootSaga() {
-  return yield all([contracts, parties]);
+  return yield all([auth, user]);
 }

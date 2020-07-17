@@ -4,9 +4,8 @@ import {persistReducer} from 'redux-persist';
 export default (reducers) => {
   const persistedReducer = persistReducer(
     {
-      key: 'contracktor2020desafio',
-      // whitelist: ['auth'],
-      blacklist: ['contracts', 'parties'],
+      key: 'kpis2020desafio',
+      whitelist: ['auth'],
       storage,
     },
     reducers,

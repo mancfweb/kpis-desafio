@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
 
-import contracts from './contracts/reducer';
-import parties from './parties/reducer';
+import auth from './auth/reducer';
+import user from './user/reducer';
 
 export default combineReducers({
-  contracts,
-  parties,
+  auth,
+  user,
 });
