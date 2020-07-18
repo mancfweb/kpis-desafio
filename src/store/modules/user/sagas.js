@@ -1,10 +1,41 @@
-import {takeLatest, call, put, all} from 'redux-saga/effects';
+import {eventChannel} from 'redux-saga';
+import {takeLatest, call, put, all, take} from 'redux-saga/effects';
 
 import {firestore, auth} from '../../../services/firebase';
 import {createUserSuccess, createUserFailure} from './actions';
 
 const collection = 'users';
-// const usersRef = firestore.collection('users');
+const usersRef = firestore.collection('users');
+
+// function* getUserByUid() {
+//   const user = {uid: '42qI8ZwdxBQyso7dyerYyp7QLMu1'};
+//   const userRef = usersRef.where('uid', '==', user.uid);
+//   const channel = eventChannel((emit) =>
+//     userRef.onSnapshot((queryResult) => {
+//       let data = {};
+//       queryResult.forEach((doc) => {
+//         data = doc.data();
+//       });
+
+//       return emit(data);
+//     }),
+//   );
+
+//   try {
+//     while (true) {
+//       const data = yield take(channel);
+//       if (Object.entries(data).length > 0) {
+//         console.log(data);
+//       } else {
+//         console.log('nao achou nada');
+//       }
+//       // yield put(successAction(data));
+//     }
+//   } catch (err) {
+//     console.log('err2', err);
+//     // yield put(errorAction(err));
+//   }
+// }
 
 export function* createUser({payload}) {
   try {
