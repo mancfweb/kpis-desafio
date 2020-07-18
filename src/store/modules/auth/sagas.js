@@ -43,14 +43,13 @@ export function* signUp({payload}) {
 
 export function* signIn({payload}) {
   try {
-    const {email, password} = payload;
-
-    const {data} = yield call(api.post, 'admin-place/auth/login', {
+    const {email, password} = payload.data;
+    // signin with email and password firebase auth
+    const data = yield call(
+      [auth, auth.signInWithEmailAndPassword],
       email,
       password,
-    });
-
-    // api.defaults.headers.Authorization = `Bearer ${token}`;
+    );
 
     yield put(signInSuccess(data));
   } catch (err) {

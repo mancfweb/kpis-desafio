@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import {signUpRequest} from '../../store/modules/user/actions';
+import {signUpRequest} from '../../store/modules/auth/actions';
 
 import Button from '../../components/Button';
 
