@@ -1,11 +1,13 @@
 import {eventChannel} from 'redux-saga';
 import {takeLatest, call, put, all, take} from 'redux-saga/effects';
 
+import exceptionErrorsHandler from '../../../utils/errors';
 import {firestore, auth} from '../../../services/firebase';
 import {createUserSuccess, createUserFailure} from './actions';
+import {signInRequest} from '../auth/actions';
 
 const collection = 'users';
-const usersRef = firestore.collection('users');
+// const usersRef = firestore.collection('users');
 
 // function* getUserByUid() {
 //   const user = {uid: '42qI8ZwdxBQyso7dyerYyp7QLMu1'};
@@ -46,24 +48,22 @@ export function* createUser({payload}) {
       email,
       password,
     );
-    // create user on firestore
-    yield call(
-      [
-        firestore.doc(`${collection}/${user.uid}`),
-        firestore.doc(`${collection}/${user.uid}`).set,
-      ],
-      {
-        name,
-        email,
-        uid: user.uid,
-      },
-      {merge: true},
-    );
 
-    yield put(createUserSuccess());
+    yield call([auth.currentUser, auth.currentUser.updateProfile], {
+      displayName: name,
+    });
+    yield call([auth.currentUser, auth.currentUser.sendEmailVerification], {
+      url: 'http://localhost:3000/verified',
+    });
+
+    yield put(createUserSuccess(user));
   } catch (err) {
-    console.log('error create user', err);
-    yield put(createUserFailure());
+    console.log('create user error', err);
+    yield put(
+      createUserFailure(
+        exceptionErrorsHandler(err && err.code ? err.code : 'error'),
+      ),
+    );
   }
 }
 

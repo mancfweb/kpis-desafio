@@ -1,57 +1,31 @@
 import {makeStyles} from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
-  root: {
+  paper: {
+    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '90%',
+    alignItems: 'center',
   },
-  header: {
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  actions: {
     width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    marginBottom: 30,
-    '& .search': {
+    '& a': {
+      display: 'flex',
       width: '100%',
-      display: 'flex',
+      justifyContent: 'center',
+      marginTop: theme.spacing(2),
+      color: theme.palette.text.primary,
     },
   },
-  container: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gridGap: 15,
-    [theme.breakpoints.down('md')]: {
-      gridTemplateColumns: 'repeat(2, 1fr)',
-    },
-    [theme.breakpoints.down('xs')]: {
-      gridTemplateColumns: '1fr',
-    },
-  },
-  card: {
-    '& .card-infos': {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-  },
-  reviewData: {
-    listStyle: 'none',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: 15,
-    '& li': {
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '5px 0',
-      '& p': {
-        width: '100%',
-      },
-      '& .parties-row': {
-        display: 'flex',
-        flexDirection: 'column',
-      },
-    },
-  },
-  successContent: {},
 }));

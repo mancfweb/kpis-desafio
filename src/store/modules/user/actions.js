@@ -5,14 +5,16 @@ export function createUserRequest(data) {
   };
 }
 
-export function createUserSuccess() {
+export function createUserSuccess(data) {
   return {
     type: '@user/CREATE_USER_SUCCESS',
+    payload: {data},
   };
 }
 
-export function createUserFailure() {
+export function createUserFailure(data) {
   return {
     type: '@user/CREATE_USER_FAILURE',
+    payload: {data},
   };
 }

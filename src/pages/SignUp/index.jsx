@@ -1,18 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-callback-return */
 import React, {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useHistory, Link} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  Avatar,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-  Box,
-  Container,
-} from '@material-ui/core';
+import {Avatar, TextField, Container} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import {useSnackbar} from 'notistack';
 
-import {signUpRequest} from '../../store/modules/auth/actions';
+import {createUserRequest} from '../../store/modules/user/actions';
 
 import Button from '../../components/Button';
 
@@ -22,18 +17,78 @@ export default function SignUp() {
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
+  const {enqueueSnackbar} = useSnackbar();
+
+  const user = useSelector((state) => state.user);
+
+  const [formFields, setFormFields] = useState({
+    name: {
+      value: '',
+      required: true,
+      error: false,
+      validationMsg: 'Informe seu nome',
+    },
+    email: {
+      value: '',
+      required: true,
+      error: false,
+      validationMsg: 'Informe um e-mail válido',
+    },
+    password: {
+      value: '',
+      required: true,
+      error: false,
+      validationMsg: 'Informe sua senha de acesso',
+    },
+  });
+
+  const inputChange = (field, value) => {
+    setFormFields({
+      ...formFields,
+      [field]: {
+        ...formFields[field],
+        error: false,
+        value,
+      },
+    });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(
-      signUpRequest({
-        name: 'marcus cavalcanti',
-        email: 'marcus.cavalcanti20@gmail.com',
-        password: 'nautico20',
-      }),
-    );
-    console.log(event);
+
+    const formData = formFields;
+    let validationError = false;
+    const payload = {};
+
+    // validation all fields and create the payload data
+    Object.keys(formFields).map((item) => {
+      const field = formFields[item];
+      payload[item] = field.value;
+
+      if (field.required && !field.value) {
+        validationError = true;
+        field.error = true;
+      }
+
+      formData[item] = field;
+    });
+    setFormFields({...formData});
+
+    // if has validation error
+    if (validationError) return;
+    // do create user
+    dispatch(createUserRequest(payload));
   };
+
+  useEffect(() => {
+    if (user.create.error) {
+      enqueueSnackbar(user.create.message, {variant: 'error'});
+    }
+    if (user.create.success) {
+      enqueueSnackbar(user.create.message, {variant: 'success'});
+      history.push('/dashboard');
+    }
+  }, [user]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -52,6 +107,12 @@ export default function SignUp() {
             label="Nome"
             name="name"
             autoFocus
+            onChange={(el) => inputChange('name', el.target.value)}
+            error={formFields.name.error}
+            helperText={
+              formFields.name.error ? formFields.name.validationMsg : ''
+            }
+            disabled={user.create.loading}
           />
           <TextField
             variant="outlined"
@@ -62,6 +123,12 @@ export default function SignUp() {
             label="E-mail"
             name="email"
             autoComplete="email"
+            onChange={(el) => inputChange('email', el.target.value)}
+            error={formFields.email.error}
+            helperText={
+              formFields.email.error ? formFields.email.validationMsg : ''
+            }
+            disabled={user.create.loading}
           />
           <TextField
             variant="outlined"
@@ -73,22 +140,23 @@ export default function SignUp() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(el) => inputChange('password', el.target.value)}
+            error={formFields.password.error}
+            helperText={
+              formFields.password.error ? formFields.password.validationMsg : ''
+            }
+            disabled={user.create.loading}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button type="submit" fullWidth>
-            Cadastrar
-          </Button>
-          <Grid container>
-            <Grid item>Ainda não tem conta? Crie a sua agora</Grid>
-          </Grid>
+          <div className={classes.submit}>
+            <Button type="submit" loading={user.create.loading} fullWidth>
+              Cadastrar
+            </Button>
+            <div className={classes.actions}>
+              <Link to="/">Já possui conta? Acesse aqui</Link>
+            </div>
+          </div>
         </form>
       </div>
-      <Box mt={8}>
-        <p>todos os direitos reservados</p>
-      </Box>
     </Container>
   );
 }

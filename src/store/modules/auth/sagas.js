@@ -1,49 +1,12 @@
 import {takeLatest, call, put, all} from 'redux-saga/effects';
-import {auth, firestore} from '../../../services/firebase';
+import {auth} from '../../../services/firebase';
+import exceptionErrorsHandler from '../../../utils/errors';
 
-import api from '../../../services/api';
-import {
-  signInSuccess,
-  signInFailure,
-  signUpSuccess,
-  signUpFailure,
-} from './actions';
-
-const collection = 'users';
-
-export function* signUp({payload}) {
-  try {
-    const {name, email, password} = payload.data;
-    // create user on firebase auth
-    const {user} = yield call(
-      [auth, auth.createUserWithEmailAndPassword],
-      email,
-      password,
-    );
-    // create user on firestore
-    yield call(
-      [
-        firestore.doc(`${collection}/${user.uid}`),
-        firestore.doc(`${collection}/${user.uid}`).set,
-      ],
-      {
-        name,
-        email,
-        uid: user.uid,
-      },
-      {merge: true},
-    );
-
-    yield put(signUpSuccess());
-  } catch (err) {
-    console.log('error create user', err);
-    yield put(signUpFailure());
-  }
-}
+import {signInSuccess, signInFailure} from './actions';
 
 export function* signIn({payload}) {
   try {
-    const {email, password} = payload.data;
+    const {email, password} = payload;
     // signin with email and password firebase auth
     const data = yield call(
       [auth, auth.signInWithEmailAndPassword],
@@ -53,17 +16,12 @@ export function* signIn({payload}) {
 
     yield put(signInSuccess(data));
   } catch (err) {
-    yield put(signInFailure());
-  }
-}
-
-export function setToken({payload}) {
-  if (!payload) return;
-
-  const {token} = payload.auth;
-
-  if (token) {
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+    console.log('login error', '=>', err);
+    yield put(
+      signInFailure(
+        exceptionErrorsHandler(err && err.code ? err.code : 'error'),
+      ),
+    );
   }
 }
 
@@ -72,8 +30,6 @@ export function signOut() {
 }
 
 export default all([
-  takeLatest('persist/REHYDRATE', setToken),
-  takeLatest('@auth/SIGN_UP_REQUEST', signUp),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   takeLatest('@auth/SIGN_OUT', signOut),
 ]);

@@ -12,28 +12,10 @@ export function signInSuccess(data) {
   };
 }
 
-export function signInFailure() {
+export function signInFailure(data) {
   return {
     type: '@auth/SIGN_IN_FAILURE',
-  };
-}
-
-export function signUpRequest(data) {
-  return {
-    type: '@user/SIGN_UP_REQUEST',
     payload: {data},
-  };
-}
-
-export function signUpSuccess() {
-  return {
-    type: '@user/SIGN_UP_SUCCESS',
-  };
-}
-
-export function signUpFailure() {
-  return {
-    type: '@user/SIGN_UP_FAILURE',
   };
 }
 

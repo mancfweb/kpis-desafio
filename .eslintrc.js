@@ -26,6 +26,7 @@ module.exports = {
     "jsx-a11y/label-has-associated-control ": "off",
     "global-require": "off",
     "react-native/no-raw-text": "off",
+    "array-callback-return": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
     "camelcase": "off",
