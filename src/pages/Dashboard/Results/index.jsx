@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Grid, Card, LinearProgress} from '@material-ui/core';
 
-import {getResearchsRequest} from '../../../store/modules/research/actions';
+import {getResearchesRequest} from '../../../store/modules/research/actions';
 
 import BarChart from './components/BarChart';
 
@@ -18,7 +18,7 @@ function Results() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const researchs = useSelector((state) => state.research.all);
+  const researches = useSelector((state) => state.research.all);
 
   const [researchFields] = useState({
     'company-employees': {
@@ -199,18 +199,21 @@ function Results() {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    dispatch(getResearchsRequest());
+    if (!researches.success) dispatch(getResearchesRequest());
   }, []);
 
   useEffect(() => {
-    if (researchs.success) {
+    if (researches.success) {
       const chartData = {};
 
-      researchs.data.map((research) => {
+      researches.data.map((research) => {
         for (const [key, value] of Object.entries(research)) {
           if (key !== 'user') {
             if (!chartData.hasOwnProperty(key)) {
-              chartData[key] = researchFields[key].options;
+              chartData[key] = researchFields[key].options.map((item) => ({
+                ...item,
+                quantity: 0,
+              }));
             }
 
             const currIndex = chartData[key].findIndex(
@@ -221,13 +224,10 @@ function Results() {
           }
         }
       });
-      // console.log(chartData);
       setData(chartData);
-      setLoading(false);
-    } else {
-      setLoading(false);
     }
-  }, [researchs]);
+    setLoading(false);
+  }, [researches]);
 
   return (
     <>

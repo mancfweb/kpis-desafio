@@ -41,22 +41,22 @@ export function getResearchFailure(data) {
 }
 
 // get all
-export function getResearchsRequest() {
+export function getResearchesRequest() {
   return {
-    type: '@research/GET_RESEARCHS_REQUEST',
+    type: '@research/GET_RESEARCHES_REQUEST',
   };
 }
 
-export function getResearchsSuccess(data) {
+export function getResearchesSuccess(data) {
   return {
-    type: '@research/GET_RESEARCHS_SUCCESS',
+    type: '@research/GET_RESEARCHES_SUCCESS',
     payload: {data},
   };
 }
 
-export function getResearchsFailure(data) {
+export function getResearchesFailure(data) {
   return {
-    type: '@research/GET_RESEARCHS_FAILURE',
+    type: '@research/GET_RESEARCHES_FAILURE',
     payload: {data},
   };
 }

@@ -8,12 +8,13 @@ import {
   createResearchFailure,
   getResearchSuccess,
   getResearchFailure,
-  getResearchsSuccess,
-  getResearchsFailure,
+  getResearchesSuccess,
+  getResearchesFailure,
 } from './actions';
 
 const researchRef = firestore.collection('researchs');
 const collection = 'researchs';
+const __channels = [];
 
 export function* createResearch({payload}) {
   try {
@@ -63,6 +64,16 @@ export function* getResearch({payload}) {
 
 export function* getAllRealTime() {
   try {
+    // close all channels
+    const indexClosed = [];
+    __channels.forEach((channel, index) => {
+      if (channel.name === 'researchesDashboard') {
+        channel.event.close();
+        indexClosed.push(index);
+      }
+    });
+    indexClosed.forEach((index) => __channels.splice(index, 1));
+
     const channel = eventChannel((emit) =>
       researchRef.onSnapshot((queryResult) => {
         let data = [];
@@ -74,14 +85,16 @@ export function* getAllRealTime() {
       }),
     );
 
+    __channels.push({name: 'researchesDashboard', event: channel});
+
     while (true) {
       const data = yield take(channel);
-      yield put(getResearchsSuccess(data));
+      yield put(getResearchesSuccess(data));
     }
   } catch (err) {
     console.log('get all researchs error', err);
     yield put(
-      getResearchsFailure(
+      getResearchesFailure(
         exceptionErrorsHandler(err && err.code ? err.code : 'error'),
       ),
     );
@@ -99,11 +112,11 @@ export function* getAll() {
       };
     });
 
-    yield put(getResearchsSuccess(data));
+    yield put(getResearchesSuccess(data));
   } catch (err) {
     console.log('get all researchs error', err);
     yield put(
-      getResearchsFailure(
+      getResearchesFailure(
         exceptionErrorsHandler(err && err.code ? err.code : 'error'),
       ),
     );
@@ -113,5 +126,5 @@ export function* getAll() {
 export default all([
   takeLatest('@research/CREATE_RESEARCH_REQUEST', createResearch),
   takeLatest('@research/GET_RESEARCH_REQUEST', getResearch),
-  takeLatest('@research/GET_RESEARCHS_REQUEST', getAllRealTime),
+  takeLatest('@research/GET_RESEARCHES_REQUEST', getAllRealTime),
 ]);

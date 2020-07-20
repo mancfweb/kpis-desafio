@@ -87,7 +87,7 @@ export default function research(state = INITIAL_STATE, action) {
         break;
       }
       // GET ALL
-      case '@research/GET_RESEARCHS_REQUEST': {
+      case '@research/GET_RESEARCHES_REQUEST': {
         draft.all = {
           ...draft.all,
           loading: true,
@@ -96,7 +96,7 @@ export default function research(state = INITIAL_STATE, action) {
         };
         break;
       }
-      case '@research/GET_RESEARCHS_SUCCESS': {
+      case '@research/GET_RESEARCHES_SUCCESS': {
         draft.all = {
           ...draft.all,
           loading: false,
@@ -106,7 +106,7 @@ export default function research(state = INITIAL_STATE, action) {
         };
         break;
       }
-      case '@research/GET_RESEARCHS_FAILURE': {
+      case '@research/GET_RESEARCHES_FAILURE': {
         draft.all = {
           ...draft.all,
           loading: false,
