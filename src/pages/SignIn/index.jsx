@@ -4,7 +4,6 @@ import React, {useEffect, useState} from 'react';
 import {useHistory, Link} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {Avatar, TextField, Container} from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {useSnackbar} from 'notistack';
 
 import {signInRequest} from '../../store/modules/auth/actions';
@@ -87,9 +86,7 @@ export default function SignIn() {
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <Avatar src="/images/logo.svg" style={{width: 70, height: 70}} />
         <h1>Login</h1>
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
@@ -128,7 +125,7 @@ export default function SignIn() {
           />
 
           <div className={classes.submit}>
-            <Button type="submit" loading={false} fullWidth>
+            <Button type="submit" loading={auth.sign.loading} fullWidth>
               Acessar
             </Button>
             <div className={classes.actions}>

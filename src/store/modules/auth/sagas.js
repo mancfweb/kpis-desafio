@@ -25,8 +25,9 @@ export function* signIn({payload}) {
   }
 }
 
-export function signOut() {
+export function* signOut() {
   // history.push('/');
+  yield call([auth, auth.signOut]);
 }
 
 export default all([

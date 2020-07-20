@@ -13,6 +13,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   content: {
     height: '100%',
-    padding: 30,
+    padding: 0,
   },
 }));

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {Header, Footer} from './components';
+import {Header} from './components';
 import {useStyles} from './styles';
 
 const DefaultTheme = ({children}) => {
@@ -10,10 +10,7 @@ const DefaultTheme = ({children}) => {
   return (
     <div className={classes.root}>
       <Header />
-      <main className={classes.content}>
-        {children}
-        <Footer />
-      </main>
+      <main className={classes.content}>{children}</main>
     </div>
   );
 };

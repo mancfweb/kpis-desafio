@@ -1,39 +1,44 @@
-import React, {useState} from 'react';
-import {Link as RouterLink} from 'react-router-dom';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link as RouterLink, useHistory} from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import {AppBar, Toolbar, Badge, Hidden, IconButton} from '@material-ui/core';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+import {AppBar, Toolbar, Hidden, IconButton} from '@material-ui/core';
 import InputIcon from '@material-ui/icons/Input';
+
+import {signOut} from '../../../../../store/modules/auth/actions';
 
 import {useStyles} from './styles';
 
 const Header = ({className, ...rest}) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  const [notifications] = useState([]);
+  const signed = useSelector((state) => state.auth.signed);
+
+  const handleSignOut = () => dispatch(signOut());
+
+  useEffect(() => {
+    if (!signed) history.push('/');
+  }, [signed]);
 
   return (
     <AppBar {...rest} className={clsx(classes.root, className)}>
       <Toolbar>
         <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logo-white.png"
-            className={classes.logo}
-          />
+          <span className={classes.logo}>
+            <img alt="Logo" src="/images/logo.svg" className={classes.logo} />
+            <span>Key People Insights</span>
+          </span>
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton className={classes.signOutButton} color="inherit">
+          <IconButton
+            onClick={() => handleSignOut()}
+            className={classes.signOutButton}
+            color="inherit">
             <InputIcon />
           </IconButton>
         </Hidden>

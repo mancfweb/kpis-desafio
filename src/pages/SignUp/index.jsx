@@ -4,7 +4,6 @@ import React, {useEffect, useState} from 'react';
 import {useHistory, Link} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {Avatar, TextField, Container} from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {useSnackbar} from 'notistack';
 
 import {createUserRequest} from '../../store/modules/user/actions';
@@ -93,9 +92,7 @@ export default function SignUp() {
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <Avatar src="/images/logo.svg" style={{width: 70, height: 70}} />
         <h1>Crie sua conta</h1>
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
